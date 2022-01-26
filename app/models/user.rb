@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-attr_accessor :remember_token
+  attr_accessor :remember_token
   before_save { self.email = email.downcase }
 
   validates :name,  presence: true, length: { maximum: 50 }
@@ -9,7 +9,7 @@ attr_accessor :remember_token
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true    
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
   # 渡された文字列のハッシュ値を返します。
   def User.digest(string)
@@ -39,7 +39,7 @@ attr_accessor :remember_token
     BCrypt::Password.new(remember_digest).is_password?(remember_token)
   end
   
-  def forger
+  def forget
     update_attribute(:remember_digest, nil)
   end
 end
